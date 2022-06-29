@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 furdb = { path = "../furdb" }
+actix-web = "4"
