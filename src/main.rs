@@ -21,10 +21,11 @@ pub(crate) async fn database(
 
     let db_info = FurDBInfo::new(&params.db_name)?;
 
-    Ok(format!(
-        "DB {:?} | {:?} | {:?}!",
-        db_path, params.db_name, db_info
-    ))
+    let db = FurDB::new(db_path, Some(db_info))?;
+
+    let db_tables = db.get_all_table_ids()?;
+
+    Ok(format!("{:?}\n{:?}", db, db_tables))
 }
 
 #[get("/{db}/{tb}")]
@@ -35,7 +36,7 @@ pub(crate) async fn table(path: web::Path<(String, String)>) -> std::io::Result<
 
 #[get("/")]
 async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
+    HttpResponse::Ok().body("FurDB")
 }
 
 #[actix_web::main]
