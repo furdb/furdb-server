@@ -5,6 +5,7 @@ use std::{error::Error, path::PathBuf};
 #[derive(serde::Deserialize)]
 pub(crate) struct DatabaseParams {
     db_name: Option<String>,
+    working_dir: Option<String>,
 }
 
 pub(crate) fn get_db(
@@ -38,7 +39,13 @@ pub(crate) async fn database(
     let db = path.into_inner();
     let params = web::Query::<DatabaseParams>::from_query(req.query_string()).unwrap();
 
-    let db = get_db(None, &db, params.db_name.clone())?;
+    let working_dir = if params.working_dir.is_some() {
+        Some(PathBuf::from(params.working_dir.clone().unwrap()))
+    } else {
+        None
+    };
+
+    let db = get_db(working_dir, &db, params.db_name.clone())?;
 
     let db_tables = db.get_all_table_ids()?;
 
