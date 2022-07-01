@@ -18,7 +18,7 @@ async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         App::new()
             .service(hello)
-            .service(database::database)
+            .service(database::get_info_handler)
             .service(table)
     })
     .bind(("127.0.0.1", 8080))?
