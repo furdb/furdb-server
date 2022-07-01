@@ -31,11 +31,23 @@ pub(crate) fn get_db(
     FurDB::new(db_path, db_info)
 }
 
+#[derive(serde::Serialize, serde::Deserialize)]
+struct DatabaseResponse {
+    db_info: FurDBInfo,
+    tables: Vec<String>,
+}
+
+impl DatabaseResponse {
+    pub fn new(db_info: FurDBInfo, tables: Vec<String>) -> Self {
+        DatabaseResponse { db_info, tables }
+    }
+}
+
 #[get("/{db}")]
 pub(crate) async fn database(
     path: web::Path<String>,
     req: HttpRequest,
-) -> Result<String, Box<dyn Error>> {
+) -> Result<impl Responder, Box<dyn Error>> {
     let db = path.into_inner();
     let params = web::Query::<DatabaseParams>::from_query(req.query_string()).unwrap();
 
@@ -46,8 +58,10 @@ pub(crate) async fn database(
     };
 
     let db = get_db(working_dir, &db, params.db_name.clone())?;
-
     let db_tables = db.get_all_table_ids()?;
 
-    Ok(format!("{:?}\n{:?}", db, db_tables))
+    let info = db.get_info()?.clone();
+    let res = DatabaseResponse::new(info, db_tables);
+
+    Ok(web::Json(res))
 }
