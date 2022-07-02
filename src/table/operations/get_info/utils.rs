@@ -39,7 +39,7 @@ pub(crate) fn generate_table_info(
 
     FurTableInfo::new(
         &table_info_generatable.name,
-        table_info_generatable.converter_server.map(|s| s.as_str()),
+        table_info_generatable.converter_server.as_deref(),
         columns,
     )
 }
@@ -49,7 +49,7 @@ pub(crate) fn generate_column(
 ) -> Result<FurColumn, Box<dyn Error>> {
     FurColumn::new(
         &column_generatable.id,
-        column_generatable.description.map(|s| s.as_str()),
+        column_generatable.description.as_deref(),
         column_generatable.size,
         generate_data_type(column_generatable.data_type)?,
     )
@@ -59,9 +59,7 @@ pub(crate) fn generate_data_type(
     data_type_generatable: DataTypeGenerator,
 ) -> Result<FurDataType, Box<dyn Error>> {
     FurDataType::new(
-        &data_type_generatable.id,
-        data_type_generatable
-            .converter_endpoint_override
-            .map(|s| s.as_str()),
+        data_type_generatable.id.as_str(),
+        data_type_generatable.converter_endpoint_override.as_deref(),
     )
 }
