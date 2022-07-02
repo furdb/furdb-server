@@ -1,4 +1,4 @@
-use furdb::{FurDB, FurDBInfo, FurTableInfo};
+use furdb::{FurColumn, FurDB, FurDBInfo, FurTableInfo};
 use std::error::Error;
 use std::path::PathBuf;
 
@@ -27,6 +27,23 @@ pub(crate) fn get_db(
     FurDB::new(db_path, db_info)
 }
 
-pub(crate) fn generate_table_info(table_info_generatable: TableGenerator) -> FurTableInfo {
+pub(crate) fn generate_table_info(
+    table_info_generatable: TableGenerator,
+) -> Result<FurTableInfo, Box<dyn Error>> {
+    let columns = table_info_generatable.columns.iter().map(|column| {
+        FurColumn::new(
+            &column.id,
+            column.description,
+            column.size,
+            column.data_type,
+        )
+    });
+
     todo!();
+
+    FurTableInfo::new(
+        &table_info_generatable.name,
+        table_info_generatable.converter_server.map(|s| s.as_str()),
+        columns,
+    )
 }
