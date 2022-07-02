@@ -32,7 +32,7 @@ pub(crate) async fn get_info_handler(
 
     let table_info = generate_table_info(table_info_generatable.0)?;
 
-    let tb = db.get_table(&tb, Some(table_info))?;
+    let tb = db.get_table(&tb, None)?;
 
     let info = tb.get_info()?.clone();
     let res = TableResponse::new(info);
