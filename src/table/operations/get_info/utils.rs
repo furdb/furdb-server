@@ -1,8 +1,8 @@
-use furdb::{FurColumn, FurDB, FurDBInfo, FurTableInfo};
+use furdb::{FurColumn, FurDB, FurDBInfo, FurDataType, FurTableInfo};
 use std::error::Error;
 use std::path::PathBuf;
 
-use super::request::TableGenerator;
+use super::request::{ColumnGenerator, DataTypeGenerator, TableGenerator};
 
 pub(crate) fn get_db(
     working_dir: Option<PathBuf>,
@@ -30,20 +30,39 @@ pub(crate) fn get_db(
 pub(crate) fn generate_table_info(
     table_info_generatable: TableGenerator,
 ) -> Result<FurTableInfo, Box<dyn Error>> {
-    let columns = table_info_generatable.columns.iter().map(|column| {
-        FurColumn::new(
-            &column.id,
-            column.description,
-            column.size,
-            column.data_type,
-        )
-    });
+    // let columns = table_info_generatable
+    //     .columns
+    //     .iter()
+    //     .map(|column_generatable| generate_column(column_generatable.clone()))
+    //     .collect();
 
-    todo!();
+    let mut columns;
 
     FurTableInfo::new(
         &table_info_generatable.name,
         table_info_generatable.converter_server.map(|s| s.as_str()),
         columns,
+    )
+}
+
+pub(crate) fn generate_column(
+    column_generatable: ColumnGenerator,
+) -> Result<FurColumn, Box<dyn Error>> {
+    FurColumn::new(
+        &column_generatable.id,
+        column_generatable.description.map(|s| s.as_str()),
+        column_generatable.size,
+        generate_data_type(column_generatable.data_type)?,
+    )
+}
+
+pub(crate) fn generate_data_type(
+    data_type_generatable: DataTypeGenerator,
+) -> Result<FurDataType, Box<dyn Error>> {
+    FurDataType::new(
+        &data_type_generatable.id,
+        data_type_generatable
+            .converter_endpoint_override
+            .map(|s| s.as_str()),
     )
 }

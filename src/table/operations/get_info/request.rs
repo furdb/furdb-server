@@ -1,11 +1,11 @@
-#[derive(serde::Deserialize)]
+#[derive(Clone, serde::Deserialize)]
 pub(crate) struct TableGenerator {
     pub name: String,
     pub converter_server: Option<String>,
     pub columns: Vec<ColumnGenerator>,
 }
 
-#[derive(serde::Deserialize)]
+#[derive(Clone, serde::Deserialize)]
 pub(crate) struct ColumnGenerator {
     pub id: String,
     pub description: Option<String>,
@@ -13,7 +13,7 @@ pub(crate) struct ColumnGenerator {
     pub data_type: DataTypeGenerator,
 }
 
-#[derive(serde::Deserialize)]
+#[derive(Clone, serde::Deserialize)]
 pub(crate) struct DataTypeGenerator {
     pub id: String,
     pub converter_endpoint_override: Option<String>,
