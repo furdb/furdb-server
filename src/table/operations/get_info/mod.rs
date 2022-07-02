@@ -22,11 +22,7 @@ pub(crate) async fn get_info_handler(
     let (db, tb) = path.into_inner();
     let params = web::Query::<TableParams>::from_query(req.query_string()).unwrap();
 
-    let working_dir = if params.working_dir.is_some() {
-        Some(PathBuf::from(params.working_dir.clone().unwrap()))
-    } else {
-        None
-    };
+    let working_dir = params.working_dir.as_ref().map(|wd| PathBuf::from(wd));
 
     let db = get_db(working_dir, &db, params.db_name.clone())?;
 
