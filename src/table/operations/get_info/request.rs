@@ -1,4 +1,9 @@
 #[derive(Clone, serde::Deserialize)]
+pub(crate) struct TableInfoGenerator {
+    pub table_info: Option<TableGenerator>,
+}
+
+#[derive(Clone, serde::Deserialize)]
 pub(crate) struct TableGenerator {
     pub name: String,
     pub converter_server: Option<String>,
