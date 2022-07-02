@@ -2,7 +2,7 @@
 pub(crate) struct TableGenerator {
     pub name: String,
     pub converter_server: Option<String>,
-    pub columns: Vec<ColumnGenerator>,
+    pub columns: Option<Vec<ColumnGenerator>>,
 }
 
 #[derive(Clone, serde::Deserialize)]

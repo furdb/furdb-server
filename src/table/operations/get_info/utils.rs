@@ -30,13 +30,12 @@ pub(crate) fn get_db(
 pub(crate) fn generate_table_info(
     table_info_generatable: TableGenerator,
 ) -> Result<FurTableInfo, Box<dyn Error>> {
-    // let columns = table_info_generatable
-    //     .columns
-    //     .iter()
-    //     .map(|column_generatable| generate_column(column_generatable.clone()))
-    //     .collect();
-
-    let mut columns;
+    let columns = table_info_generatable.columns.map(|column_generators| {
+        column_generators
+            .iter()
+            .map(|column_generatable| generate_column(column_generatable.clone()).unwrap())
+            .collect()
+    });
 
     FurTableInfo::new(
         &table_info_generatable.name,
