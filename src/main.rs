@@ -9,6 +9,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(database::get_info_handler)
             .service(table::get_info_handler)
+            .service(table::get_data_handler)
     })
     .bind(("127.0.0.1", 8080))?
     .run()
