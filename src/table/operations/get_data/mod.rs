@@ -37,7 +37,7 @@ pub(crate) async fn get_data_handler(
         None
     };
 
-    let mut tb = db.get_table(&tb, table_info)?;
+    let tb = db.get_table(&tb, table_info)?;
 
     let data = if table_generatable.is_some()
         && table_generatable
