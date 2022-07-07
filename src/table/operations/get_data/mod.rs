@@ -60,10 +60,10 @@ pub(crate) async fn get_data_handler(
             }
         }
 
-        let index = tb.query(&query_column, &query.unwrap().value)?;
-        vec![tb.get_row(index.unwrap())?]
+        let index = tb.query(&query_column, &query.unwrap().value).await?;
+        vec![tb.get_row(index.unwrap()).await?]
     } else {
-        tb.get_all()?
+        tb.get_all().await?
     };
 
     let res = TableResponse::new(data);
