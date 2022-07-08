@@ -2,6 +2,8 @@ use furdb::{FurDB, FurDBInfo};
 use std::error::Error;
 use std::path::PathBuf;
 
+use crate::config::WORKSPACE_PATH;
+
 pub(crate) fn get_db(
     working_dir: Option<PathBuf>,
     db_id: &str,
@@ -10,7 +12,7 @@ pub(crate) fn get_db(
     let working_dir = if working_dir.is_some() {
         working_dir.unwrap()
     } else {
-        PathBuf::from("D:\\Home\\Repositories\\FurDB\\TestDBs")
+        PathBuf::from(WORKSPACE_PATH)
     };
 
     let mut db_path = working_dir.clone();
